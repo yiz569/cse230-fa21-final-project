@@ -18,8 +18,8 @@ will get for the game.
 # How to play the game
 
 A Klotski board contains ten blocks of different sizes to slide around on the
-game board: one $2 \times 2$ square, four $1 \times 1$ squares, and five
-$1 \times 2$ rectangles. At any time, two of the twenty spots on the board are
+game board: one 2 * 2 square, four 1 * 1 squares, and five
+1 * 2 rectangles. At any time, two of the twenty spots on the board are
 always empty. The blocks cannot rotate or exit the board. The game ends when the
 largest block reaches the bottom center before it can exit.
 
@@ -31,3 +31,5 @@ step counter will increase by 1.
 The goal of the game is to slide the blocks around to get the largest block
 to the exit at the bottom center with as few steps as possible, so that it may
 exit the playing area.
+
+![](https://i.imgur.com/4b1M0yu.png)
