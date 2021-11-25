@@ -20,8 +20,8 @@ higher score they will get for the game.
 ### How to play the game
 
 A Klotski game contains ten blocks of different sizes to slide around on a
-5 _ 4 game board: one 2 _ 2 square, four 1 _ 1 squares, and five
-1 _ 2 rectangles. At any time, two of 1 \* 1 spots on the board are
+5 * 4 game board: one 2 * 2 square, four 1 * 1 squares, and five
+1 * 2 rectangles. At any time, two of 1 * 1 spots on the board are
 always empty. The blocks cannot rotate or exit the board. The game ends when the
 largest block reaches the bottom center before it can exit.
 
