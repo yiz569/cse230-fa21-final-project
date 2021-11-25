@@ -38,7 +38,7 @@ exit the playing area.
 
 ## Milestone 2: Updates
 
-- What is the architecture of your application (the key components)?
+- What is the architecture of your application (the key components)?\
   We plan to implement our application using model-view-controller (MVC) design
   pattern. First of all, we will have a Main.hs file to run the game. Then we
   will divide the related program logic into three interconnected elements: Model,
@@ -47,7 +47,7 @@ exit the playing area.
   will be used to display the board state and score. The Controller.hs will handle
   user keyboard inputs and tell the model or view what to change.
 
-- What challenges (if any) did you have so far and how did you solve them?
+- What challenges (if any) did you have so far and how did you solve them?\
   We originally planned to make a Klotski solver to automatically solve this game.
   However, it seems we have to focus on the development of this game rather than
   researching the solver. Besides, in our application, there are multiple targets
@@ -55,7 +55,7 @@ exit the playing area.
   to highlight the block players choose so they know which block they are actually
   moving around.
 
-- Do you expect to meet your goals until the deadline?
+- Do you expect to meet your goals until the deadline?\
   We believe we can complete the development of the major functions and deliver a
   playale Klotski board game before the deadline. The key functions include showing
   the board, accepting user inputs, updating the board and score, and also checking
@@ -63,7 +63,7 @@ exit the playing area.
   we might not able to successfully deliver a automated Klotski solver but we will
   definitely try on that.
 
-- If not, how will you modify your goals?
+- If not, how will you modify your goals?\
   We also mentioned in the introduction that we will provide 15 levels of different
   starting layout. If time is limited, we consider to provide fewer levels but we
   will definitely deliver a playable Klotski game before the deadline.
