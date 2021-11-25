@@ -1,6 +1,6 @@
 # CSE230 Final Project: Klotski Game
 
-# Milestone 1: Registration and Proposal
+## Milestone 1: Registration and Proposal
 
 Group Members: (github username)
 
@@ -9,7 +9,7 @@ Group Members: (github username)
 - Xiaotian Shi (xshi1012)
 - Yikuan Xia (kent0318)
 
-## Introduction
+### Introduction
 
 In this project, we will implement an ancient sliding block puzzle game: Klotski.
 In our game, we will provide a total of 15 levels where each has a different
@@ -17,7 +17,7 @@ starting layout. Players can choose a level to play with. We will also record
 the number of steps they take in each level. The fewer steps they take, the
 higher score they will get for the game.
 
-## How to play the game
+### How to play the game
 
 A Klotski game contains ten blocks of different sizes to slide around on a
 5 _ 4 game board: one 2 _ 2 square, four 1 _ 1 squares, and five
@@ -36,7 +36,7 @@ exit the playing area.
 
 ![One of the fifteen starting layout of Klotski game](https://i.imgur.com/4b1M0yu.png)
 
-# Milestone 2: Updates
+## Milestone 2: Updates
 
 - What is the architecture of your application (the key components)?
   We plan to implement our application using model-view-controller (MVC) design
