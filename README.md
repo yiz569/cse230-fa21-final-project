@@ -43,9 +43,12 @@ exit the playing area.
   pattern. First of all, we will have a Main.hs file to run the game. Then we
   will divide the related program logic into three interconnected elements: Model,
   View and Control. The Model.hs will be the central component which handles data
-  structures and manages the data, logic and rules of the application. The View.hs
-  will be used to display the board state and score. The Controller.hs will handle
-  user keyboard inputs and tell the model or view what to change.
+  structures and manages the data, logic and rules of the application. This will 
+  contain models for Block, Board, Selector, Score, and etc. The View.hs
+  will be used to display the board state, score, and current selector position. 
+  The Controller.hs will handle user keyboard inputs and tell the model or view 
+  what to change. There should also be several levels of the game with different
+  board setups available for the player to play.
 
 - What challenges (if any) did you have so far and how did you solve them?\
   We originally planned to make a Klotski solver to automatically solve this game.
