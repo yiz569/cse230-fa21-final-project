@@ -10,9 +10,6 @@ type Board = [Block]
   | covers b pos = Just b
   | otherwise = bs ! pos
 
-empty :: Board
-empty = []
-
 finished :: Board -> Bool
 finished [] = False
 finished (b:bs)

@@ -16,9 +16,15 @@ data PlayState = PS
   , selected  :: Maybe Block.Block -- current selected Block
   }
 
-init :: Board.Board -> PlayState
+init :: Int -> PlayState
 init b = PS
-  { board     = b
+  { board     = boards !! b
   , selector  = Block.Pos {Block.x = 0, Block.y = 0}
   , selected  = Nothing
   }
+
+boards :: [Board.Board]
+boards = [simple]
+
+simple :: Board.Board
+simple = [Block.target]

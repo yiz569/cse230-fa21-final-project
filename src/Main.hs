@@ -21,7 +21,7 @@ main = do
     threadDelay 100000
   let buildVty = V.mkVty V.defaultConfig
   initialVty <- buildVty
-  customMain initialVty buildVty (Just chan) app (Model.init Board.empty)
+  customMain initialVty buildVty (Just chan) app (Model.init 0)
   print "hello world"
 
 app :: App PlayState Tick String

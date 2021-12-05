@@ -6,7 +6,7 @@ data Pos = Pos
   }
   deriving (Eq, Ord)
 
-data Block = Block
+data Block = (HDouble | VDouble | Single
   { bName   :: String
   , bWidth  :: Int
   , bHeight :: Int
