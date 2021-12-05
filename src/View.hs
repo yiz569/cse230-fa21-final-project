@@ -2,7 +2,7 @@ module View (view) where
 
 import Brick
 import Brick.Widgets.Border (borderWithLabel, border, hBorder, vBorder)
-import Brick.Widgets.Border.Style (unicode, ascii)
+import Brick.Widgets.Border.Style (ascii, unicode, unicodeBold)
 import Text.Printf (printf)
 
 import Model
@@ -27,7 +27,10 @@ mkRow s row = hBox [ mkCell s row col | col <- [0..3] ]
 
 mkCell :: PlayState -> Int -> Int -> Widget n
 mkCell s y x
-  | Model.isCurr s (Block.Pos x y) = withCursor (withBorderStyle ascii raw)
+  | Model.isCurr s (Block.Pos x y) = 
+    case Model.selected s of
+      True -> withCursor (withBorderStyle unicodeBold raw)
+      _ -> withCursor (withBorderStyle ascii raw)
   | otherwise = withBorderStyle ascii raw
   where
     raw = case (Model.board s) Board.! (Block.Pos x y) of

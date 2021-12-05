@@ -67,6 +67,51 @@ cursorDown s = case currBlock s of
     where
       newPos = Block.down (Block.Pos (Block.x (curr s)) (Block.posY b - 1 + (Block.bHeight b)))
 
+moveRight :: PlayState -> PlayState
+moveRight s = if not (selected s) then s else
+  case currBlock s of
+    Nothing -> s
+    Just b -> s {
+      board = Board.blockRight (board s) b,
+      currBlock = (board s) Board.! (curr s),
+      selected = False
+    }
+
+moveLeft :: PlayState -> PlayState
+moveLeft s = if not (selected s) then s else
+  case currBlock s of
+    Nothing -> s
+    Just b -> s {
+      board = Board.blockLeft (board s) b,
+      currBlock = (board s) Board.! (curr s),
+      selected = False
+    }
+
+moveUp :: PlayState -> PlayState
+moveUp s = if not (selected s) then s else
+  case currBlock s of
+    Nothing -> s
+    Just b -> s {
+      board = Board.blockUp (board s) b,
+      currBlock = (board s) Board.! (curr s),
+      selected = False
+    }
+
+moveDown :: PlayState -> PlayState
+moveDown s = if not (selected s) then s else
+  case currBlock s of
+    Nothing -> s
+    Just b -> s {
+      board = Board.blockDown (board s) b,
+      currBlock = (board s) Board.! (curr s),
+      selected = False
+    }
+
+select :: PlayState -> PlayState
+select s = case currBlock s of
+  Nothing -> s
+  _ -> s { selected = not (selected s) }
+
 boards :: [Board.Board]
 boards = [simple]
 
