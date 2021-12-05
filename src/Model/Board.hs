@@ -12,12 +12,13 @@ type Board = [Block]
 
 finished :: Board -> Bool
 finished [] = False
-finished (b:bs)
-  | bName b == "target" =
-      if posX b == 1 && posY b == 3
+finished (b:bs) =
+  case b of
+    Target _ _ x y ->
+      if x == 1 && y == 3
       then
         True
       else
         False
-  | otherwise = finished bs
+    _ -> finished bs
 

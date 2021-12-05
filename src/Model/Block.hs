@@ -4,15 +4,50 @@ data Pos = Pos
   { x :: Int
   , y :: Int 
   }
-  deriving (Eq, Ord)
+  deriving (Eq)
 
-data Block = (HDouble | VDouble | Single
-  { bName   :: String
-  , bWidth  :: Int
+right :: Pos -> Pos
+right (Pos x y)
+  | x < 3 = Pos (x+1) y
+  | otherwise = Pos x y
+
+left :: Pos -> Pos
+left (Pos x y)
+  | x > 0 = Pos (x-1) y
+  | otherwise = Pos x y
+
+up :: Pos -> Pos
+up (Pos x y)
+  | y > 0 = Pos x (y-1)
+  | otherwise = Pos x y
+
+down :: Pos -> Pos
+down (Pos x y)
+  | y < 4 = Pos x (y+1)
+  | otherwise = Pos x y
+
+data Block = HDouble { bWidth  :: Int
   , bHeight :: Int
   , posX    :: Int
   , posY    :: Int
   }
+  | VDouble { bWidth  :: Int
+  , bHeight :: Int
+  , posX    :: Int
+  , posY    :: Int
+  }
+  | Single { bWidth  :: Int
+  , bHeight :: Int
+  , posX    :: Int
+  , posY    :: Int
+  }
+  | Target
+  { bWidth  :: Int
+  , bHeight :: Int
+  , posX    :: Int
+  , posY    :: Int
+  }
+  deriving (Eq)
 
 covers :: Block -> Pos -> Bool
 covers b pos =
@@ -24,13 +59,13 @@ covers b pos =
     False
 
 singleAtXy :: Int -> Int -> Block
-singleAtXy = Block "single" 1 1
+singleAtXy = Single 1 1
 
 hDoubleAtXy :: Int -> Int -> Block
-hDoubleAtXy = Block "hDouble" 2 1
+hDoubleAtXy = HDouble 2 1
 
 vDoubleAtXy :: Int -> Int -> Block
-vDoubleAtXy = Block "vDouble" 1 2
+vDoubleAtXy = VDouble 1 2
 
 target :: Block
-target = Block "target" 2 2 1 0
+target = Target 2 2 1 0
