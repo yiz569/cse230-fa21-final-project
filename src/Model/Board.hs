@@ -101,7 +101,7 @@ blockUp board block = if canUp board block then up board block else board
             Just _ -> False
             _ -> True
     canUp board (Single _ _ tx ty) = 
-      if tx <= 0 then False else
+      if ty <= 0 then False else
         case board ! (Pos tx (ty-1)) of
           Just _ -> False
           _ -> True
