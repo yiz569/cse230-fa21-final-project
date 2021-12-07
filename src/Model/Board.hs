@@ -10,8 +10,13 @@ type Board = [Block]
   | covers b pos = Just b
   | otherwise = bs ! pos
 
-blockRight :: Board -> Block -> Board
-blockRight board block = if canRight board block then right board block else board 
+data MoveResult = MoveResult {
+  board :: Board,
+  step :: Int
+}
+
+blockRight :: Board -> Block -> MoveResult
+blockRight board block = if canRight board block then MoveResult (right board block) 1 else MoveResult board 0
   where
     canRight board (Target _ _ tx ty) = 
       if tx >= 2 then False else
@@ -44,8 +49,8 @@ blockRight board block = if canRight board block then right board block else boa
           | b /= block = b : (go bs block)
           | otherwise = b { posX = (posX b) + 1 } : bs
 
-blockLeft :: Board -> Block -> Board
-blockLeft board block = if canLeft board block then left board block else board 
+blockLeft :: Board -> Block -> MoveResult
+blockLeft board block = if canLeft board block then MoveResult (left board block) 1 else MoveResult board 0 
   where
     canLeft board (Target _ _ tx ty) = 
       if tx <= 0 then False else
@@ -78,8 +83,8 @@ blockLeft board block = if canLeft board block then left board block else board
           | b /= block = b : (go bs block)
           | otherwise = b { posX = (posX b) - 1 } : bs
 
-blockUp :: Board -> Block -> Board
-blockUp board block = if canUp board block then up board block else board 
+blockUp :: Board -> Block -> MoveResult
+blockUp board block = if canUp board block then MoveResult (up board block) 1 else MoveResult board 0 
   where
     canUp board (Target _ _ tx ty) = 
       if ty <= 0 then False else
@@ -112,8 +117,8 @@ blockUp board block = if canUp board block then up board block else board
           | b /= block = b : (go bs block)
           | otherwise = b { posY = (posY b) - 1 } : bs
 
-blockDown :: Board -> Block -> Board
-blockDown board block = if canDown board block then down board block else board 
+blockDown :: Board -> Block -> MoveResult
+blockDown board block = if canDown board block then MoveResult (down board block) 1 else MoveResult board 0 
   where
     canDown board (Target _ _ tx ty) = 
       if ty >= 3 then False else

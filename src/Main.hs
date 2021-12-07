@@ -21,8 +21,11 @@ main = do
     threadDelay 100000
   let buildVty = V.mkVty V.defaultConfig
   initialVty <- buildVty
-  customMain initialVty buildVty (Just chan) app (Model.init 0)
-  print "hello world"
+  res <- customMain initialVty buildVty (Just chan) app (Model.init 0)
+  if (Model.finished res) then
+    putStrLn $ "Congrats! You finised game level: " ++ (show (Model.level res + 1)) ++ " in " ++ (show (Model.steps res)) ++ " steps"
+  else 
+    putStrLn "Game Over"
 
 app :: App PlayState Tick String
 app = App

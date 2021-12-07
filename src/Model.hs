@@ -15,6 +15,9 @@ data PlayState = PS
   , curr      :: Block.Pos    -- cursor location
   , currBlock :: Maybe Block.Block -- current selected Block
   , selected  :: Bool
+  , steps     :: Int
+  , finished  :: Bool
+  , level     :: Int
   }
 
 init :: Int -> PlayState
@@ -23,6 +26,9 @@ init b = PS
   , curr      = Block.Pos {Block.x = 0, Block.y = 0}
   , currBlock = Just (Block.vDoubleAtXy 0 0)
   , selected  = False
+  , steps = 0
+  , finished = False
+  , level = b
   }
 
 isCurr :: PlayState -> Block.Pos -> Bool
@@ -72,51 +78,74 @@ moveRight s = if not (selected s) then s else
   case currBlock s of
     Nothing -> s
     Just b -> s {
-      board = Board.blockRight (board s) b,
+      board = (Board.board res),
       currBlock = (board s) Board.! (curr s),
-      selected = False
+      selected = False,
+      steps = (steps s) + (Board.step res),
+      finished = Board.finished (Board.board res)
     }
+      where
+        res = Board.blockRight (board s) b
 
 moveLeft :: PlayState -> PlayState
 moveLeft s = if not (selected s) then s else
-  case currBlock s of
+  case currBlock s of 
     Nothing -> s
     Just b -> s {
-      board = Board.blockLeft (board s) b,
+      board = (Board.board res),
       currBlock = (board s) Board.! (curr s),
-      selected = False
+      selected = False,
+      steps = (steps s) + (Board.step res),
+      finished = Board.finished (Board.board res)
     }
+      where
+        res = Board.blockLeft (board s) b
 
 moveUp :: PlayState -> PlayState
 moveUp s = if not (selected s) then s else
   case currBlock s of
     Nothing -> s
     Just b -> s {
-      board = Board.blockUp (board s) b,
+      board = (Board.board res),
       currBlock = (board s) Board.! (curr s),
-      selected = False
+      selected = False,
+      steps = (steps s) + (Board.step res),
+      finished = Board.finished (Board.board res)
     }
+      where
+        res = Board.blockUp (board s) b
 
 moveDown :: PlayState -> PlayState
 moveDown s = if not (selected s) then s else
   case currBlock s of
     Nothing -> s
     Just b -> s {
-      board = Board.blockDown (board s) b,
+      board = (Board.board res),
       currBlock = (board s) Board.! (curr s),
-      selected = False
+      selected = False,
+      steps = (steps s) + (Board.step res),
+      finished = Board.finished (Board.board res)
     }
+      where
+        res = Board.blockDown (board s) b
 
 select :: PlayState -> PlayState
 select s = case currBlock s of
   Nothing -> s
   _ -> s { selected = not (selected s) }
 
+checkWin :: PlayState -> PlayState
+checkWin s = s {finished = Board.finished (board s)}
+
 boards :: [Board.Board]
-boards = [simple]
+boards = [tutorial, simple]
 
 simple :: Board.Board
 simple = [Block.target,
           Block.vDoubleAtXy 0 0, Block.vDoubleAtXy 3 0, Block.vDoubleAtXy 0 2, Block.vDoubleAtXy 3 2,
           Block.hDoubleAtXy 1 2,
           Block.singleAtXy 1 3, Block.singleAtXy 2 3, Block.singleAtXy 0 4, Block.singleAtXy 3 4]
+
+tutorial :: Board.Board
+tutorial = [Block.target,
+            Block.vDoubleAtXy 0 0]

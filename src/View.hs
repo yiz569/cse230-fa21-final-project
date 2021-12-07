@@ -21,7 +21,7 @@ view' s =
       vBox [ mkRow s row | row <- [0..4] ]
 
 header :: PlayState -> String
-header _ = printf "klotski"
+header s = printf "Klotski Level: %d  Step: %d" ((level s) + 1) (steps s)
 
 mkRow :: PlayState -> Int -> Widget n
 mkRow s row = hBox [ mkCell s row col | col <- [0..3] ]
