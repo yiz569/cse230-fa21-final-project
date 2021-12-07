@@ -2,8 +2,7 @@ module View (view) where
 
 import Brick
 import Brick.Widgets.Core as C
--- import Brick.Widgets.Border (borderWithLabel, border, hBorder, vBorder, joinableBorder)
-import Brick.Widgets.Border
+import Brick.Widgets.Border (borderWithLabel, border, hBorder, vBorder, joinableBorder)
 import Brick.Widgets.Border.Style (ascii, unicode, unicodeBold)
 import Text.Printf (printf)
 
