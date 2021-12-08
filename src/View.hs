@@ -15,7 +15,7 @@ view :: PlayState -> [Widget String]
 view s = [view' s]
 
 view' :: PlayState -> Widget String
-view' s = 
+view' s =
   withBorderStyle unicode $
     borderWithLabel (str (header s)) $
       vBox [ mkRow s row | row <- [0..4] ]
@@ -28,13 +28,16 @@ mkRow s row = hBox [ mkCell s row col | col <- [0..3] ]
 
 mkCell :: PlayState -> Int -> Int -> Widget n
 mkCell s y x
-  | Model.isCurr s (Block.Pos x y) = 
+  | Model.isCurr s (Block.Pos x y) && null (Model.solution s)=
     case Model.selected s of
       True -> withCursor (withBorderStyle unicodeBold raw)
       _ -> withCursor (withBorderStyle unicode raw)
   | otherwise = withBorderStyle unicode raw
   where
-    raw = case (Model.board s) Board.! (Block.Pos x y) of
+    boardToShow = case Model.solution s of
+      [] -> Model.board s
+      x:_ -> x
+    raw = case boardToShow Board.! (Block.Pos x y) of
       Nothing -> emptyBlock
       Just b -> case b of
         t@(Block.Target _ _ _ _) -> renderTarget t x y
@@ -80,29 +83,12 @@ emptyBlock = (block <+> col <+> col) <=> (row <+> (str " ")) <=> (row <+> (str "
 
 single, vDoubleTop, vDoubleBottom, hDoubleLeft, hDoubleRight :: Widget n
 single = vLimit 7 $ hLimit 14 $ border block
--- vDoubleTop = vLimit 7 $ hLimit 14 $
---                 hBorder <=> (vBorder <+> block <+> vBorder)
--- vDoubleBottom = vLimit 7 $ hLimit 14 $
---                   (vBorder <+> block <+> vBorder) <=> hBorder
--- hDoubleLeft = vLimit 7 $ hLimit 14 $ 
---                 vBorder <+> (hBorder <=> block <=> hBorder)
--- hDoubleRight = vLimit 7 $ hLimit 14 $ 
---                 (hBorder <=> block  <=> hBorder) <+> vBorder
 vDoubleTop = vLimit 7 $ hLimit 14 $ bottomlessBorder block
 vDoubleBottom = vLimit 7 $ hLimit 14 $ toplessBorder block
 hDoubleLeft = vLimit 7 $ hLimit 14 $ rightlessBorder block
 hDoubleRight = vLimit 7 $ hLimit 14 $ leftlessBorder block
 
 targetTopLeft, targetTopRight, targetBottomLeft, targetBottomRight :: Widget n
--- targetTopLeft = vLimit 7 $ hLimit 14 $ joinBorders $
---                   hBorder <=> (vBorder <+> block <+> col)
--- targetTopRight = vLimit 7 $ hLimit 14 $ joinBorders $
---                   hBorder <=> (block <+> col <+> vBorder)
--- targetBottomLeft = vLimit 7 $ hLimit 14 $ joinBorders $
---                     (vBorder <+> block <+> col) <=> hBorder
--- targetBottomRight = vLimit 7 $ hLimit 14 $ joinBorders $
---                       (block <+> col <+> vBorder) <=> hBorder
-
 targetTopLeft = vLimit 7 $ hLimit 14 $ tlBorder block
 targetTopRight = vLimit 7 $ hLimit 14 $ trBorder block
 targetBottomLeft = vLimit 7 $ hLimit 14 $ blBorder block
@@ -116,14 +102,14 @@ customizedBorder (Edges t b l r) mid = C.vBox[
     C.hBox [bl_corner, bottom, br_corner]
     ]
     where
-    top = if t then hBorder else C.emptyWidget 
-    bottom = if b then hBorder else C.emptyWidget 
-    left = if l then vBorder else col 
-    right = if r then joinBorders vBorder else col 
-    tl_corner = if t && l then joinableBorder (Edges False True False True) else C.emptyWidget 
-    tr_corner = if t && r then joinableBorder (Edges False True True False) else C.emptyWidget 
+    top = if t then hBorder else C.emptyWidget
+    bottom = if b then hBorder else C.emptyWidget
+    left = if l then vBorder else col
+    right = if r then joinBorders vBorder else col
+    tl_corner = if t && l then joinableBorder (Edges False True False True) else C.emptyWidget
+    tr_corner = if t && r then joinableBorder (Edges False True True False) else C.emptyWidget
     bl_corner = if b && l then joinableBorder (Edges True False False True) else C.emptyWidget
-    br_corner = if b && r then joinableBorder (Edges True False True False) else C.emptyWidget 
+    br_corner = if b && r then joinableBorder (Edges True False True False) else C.emptyWidget
 
 
 toplessBorder :: Widget n -> Widget n

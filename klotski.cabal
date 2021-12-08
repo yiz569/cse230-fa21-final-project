@@ -9,7 +9,8 @@ executable klotski
     main-is:            Main.hs
     build-depends:      base >= 4.9,
                         vty,
-                        brick
+                        brick,
+                        containers
     hs-source-dirs:     src
     other-modules:      View,
                         Control,

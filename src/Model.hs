@@ -2,7 +2,13 @@ module Model where
 
 import qualified Model.Block as Block
 import qualified Model.Board as Board
-
+import Data.Sequence (Seq(..), (><))
+import qualified Data.Sequence as Seq
+-- import Data.Set (Set, notMember, union, fromList)
+-- import qualified Data.Set as Set
+import Model.Board (blockDown, blockLeft, blockUp, blockRight)
+import Data.Map (Map, notMember, insert, (!))
+import qualified Data.Map as Map
 data Tick = Tick
 
 data State
@@ -17,6 +23,7 @@ data PlayState = PS
   , steps     :: Int
   , finished  :: Bool
   , level     :: Int
+  , solution  :: [Board.Board]
   }
 
 init :: Int -> PlayState
@@ -27,16 +34,17 @@ init b = PS
   , steps = 0
   , finished = False
   , level = b
+  , solution = []
   }
 
 currBlock :: PlayState -> Maybe Block.Block
 currBlock s = (board s) Board.! curr s
 
 isCurr :: PlayState -> Block.Pos -> Bool
-isCurr s p = 
+isCurr s p =
   case currBlock s of
     Just b -> Block.covers b p
-    Nothing -> p == (curr s)
+    Nothing -> p == curr s
 
 cursorRight :: PlayState -> PlayState
 cursorRight s = case currBlock s of
@@ -89,7 +97,7 @@ moveRight s = if not (selected s) then s else
 
 moveLeft :: PlayState -> PlayState
 moveLeft s = if not (selected s) then s else
-  case currBlock s of 
+  case currBlock s of
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
@@ -146,3 +154,33 @@ simple = [Block.target,
 tutorial :: Board.Board
 tutorial = [Block.target,
             Block.vDoubleAtXy 0 0]
+
+hint :: PlayState -> PlayState
+hint s = case solution s of
+  [] -> hint s {solution = bfs (Seq.singleton $ board s) (Map.singleton (Board.encode $ board s) (board s))}
+  _:xs -> s {solution = xs}
+
+backToGame :: PlayState -> PlayState
+backToGame s = s {solution = []}
+
+wrapAction :: (PlayState -> PlayState) -> PlayState -> PlayState
+wrapAction action s = case solution s of 
+  [] -> action s
+  _ -> s
+
+bfs :: Seq Board.Board -> Map Integer Board.Board -> [Board.Board]
+bfs Empty _  = []
+bfs (x :<| xs) seen
+  | Board.finished x = reverse $ f x
+  | otherwise = bfs newQueue newSeen
+    where
+      newBoards = filter ((`notMember` seen) . Board.encode ) $ Board.board <$>
+        ([blockDown x, blockLeft x, blockUp x, blockRight x] <*> x)
+      newSeen = foldr (\b m -> insert (Board.encode b) x m) seen newBoards
+      newQueue = xs >< Seq.fromList newBoards 
+      f :: Board.Board -> [Board.Board]
+      f b = if parent == b
+        then [b]
+        else b : f parent
+        where 
+          parent = seen ! Board.encode b

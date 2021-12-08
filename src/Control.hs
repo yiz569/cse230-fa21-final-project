@@ -15,18 +15,20 @@ control s ev = case ev of
   T.VtyEvent (V.EvKey (V.KChar '1') _) -> Brick.continue (Model.init 0)
   T.VtyEvent (V.EvKey (V.KChar '2') _) -> Brick.continue (Model.init 1)
   T.VtyEvent (V.EvKey V.KRight _) -> case selected s of
-    False -> Brick.continue (cursorRight s)
-    _ -> exec (moveRight s)
+    False -> Brick.continue (wrapAction cursorRight s)
+    _ -> exec (wrapAction moveRight s)
   T.VtyEvent (V.EvKey V.KLeft _) -> case selected s of
-    False -> Brick.continue (cursorLeft s)
-    _ -> exec (moveLeft s)
+    False -> Brick.continue (wrapAction cursorLeft s)
+    _ -> exec (wrapAction moveLeft s)
   T.VtyEvent (V.EvKey V.KUp _) -> case selected s of
-    False -> Brick.continue (cursorUp s)
-    _ -> exec (moveUp s)
+    False -> Brick.continue (wrapAction cursorUp s)
+    _ -> exec (wrapAction moveUp s)
   T.VtyEvent (V.EvKey V.KDown _) -> case selected s of
-    False -> Brick.continue (cursorDown s)
-    _ -> exec (moveDown s)
-  T.VtyEvent (V.EvKey V.KEnter _) -> Brick.continue (select s)
+    False -> Brick.continue (wrapAction cursorDown s)
+    _ -> exec (wrapAction moveDown s)
+  T.VtyEvent (V.EvKey V.KEnter _) -> Brick.continue (wrapAction select s)
+  T.VtyEvent (V.EvKey (V.KChar 'h') _) -> Brick.continue (hint s)
+  T.VtyEvent (V.EvKey (V.KChar 'b') _) -> Brick.continue (backToGame s)
   _ -> Brick.continue s
 
 exec :: PlayState -> EventM n (Next PlayState)
