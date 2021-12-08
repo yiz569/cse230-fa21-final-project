@@ -79,7 +79,7 @@ moveRight s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (board s) Board.! (curr s),
+      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -93,7 +93,7 @@ moveLeft s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (board s) Board.! (curr s),
+      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -107,7 +107,7 @@ moveUp s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (board s) Board.! (curr s),
+      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -121,7 +121,7 @@ moveDown s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (board s) Board.! (curr s),
+      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
