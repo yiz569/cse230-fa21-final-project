@@ -13,7 +13,6 @@ data State
 data PlayState = PS
   { board     :: Board.Board  -- current board
   , curr      :: Block.Pos    -- cursor location
-  , currBlock :: Maybe Block.Block -- current selected Block
   , selected  :: Bool
   , steps     :: Int
   , finished  :: Bool
@@ -24,12 +23,14 @@ init :: Int -> PlayState
 init b = PS
   { board     = boards !! b
   , curr      = Block.Pos {Block.x = 0, Block.y = 0}
-  , currBlock = Just (Block.vDoubleAtXy 0 0)
   , selected  = False
   , steps = 0
   , finished = False
   , level = b
   }
+
+currBlock :: PlayState -> Maybe Block.Block
+currBlock s = (board s) Board.! curr s
 
 isCurr :: PlayState -> Block.Pos -> Bool
 isCurr s p = 
@@ -39,37 +40,37 @@ isCurr s p =
 
 cursorRight :: PlayState -> PlayState
 cursorRight s = case currBlock s of
-  Nothing -> s { curr = newPos, currBlock = (board s) Board.! newPos}
+  Nothing -> s { curr = newPos}
     where
       newPos = Block.right (curr s)
-  Just b -> s { curr = newPos, currBlock = (board s) Board.! newPos }
+  Just b -> s { curr = newPos}
     where
       newPos = Block.right (Block.Pos ((Block.posX b) - 1 + (Block.bWidth b)) (Block.y (curr s)))
 
 cursorLeft :: PlayState -> PlayState
 cursorLeft s = case currBlock s of
-  Nothing -> s { curr = newPos, currBlock = (board s) Board.! newPos}
+  Nothing -> s { curr = newPos}
     where
       newPos = Block.left (curr s)
-  Just b -> s { curr = newPos, currBlock = (board s) Board.! newPos }
+  Just b -> s { curr = newPos}
     where
       newPos = Block.left (Block.Pos (Block.posX b) (Block.y (curr s)))
 
 cursorUp :: PlayState -> PlayState
 cursorUp s = case currBlock s of
-  Nothing -> s { curr = newPos, currBlock = (board s) Board.! newPos}
+  Nothing -> s { curr = newPos}
     where
       newPos = Block.up (curr s)
-  Just b -> s { curr = newPos, currBlock = (board s) Board.! newPos }
+  Just b -> s { curr = newPos}
     where
       newPos = Block.up (Block.Pos (Block.x (curr s)) (Block.posY b))
 
 cursorDown :: PlayState -> PlayState
 cursorDown s = case currBlock s of
-  Nothing -> s { curr = newPos, currBlock = (board s) Board.! newPos}
+  Nothing -> s { curr = newPos}
     where
       newPos = Block.down (curr s)
-  Just b -> s { curr = newPos, currBlock = (board s) Board.! newPos }
+  Just b -> s { curr = newPos}
     where
       newPos = Block.down (Block.Pos (Block.x (curr s)) (Block.posY b - 1 + (Block.bHeight b)))
 
@@ -79,7 +80,6 @@ moveRight s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -93,7 +93,6 @@ moveLeft s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -107,7 +106,6 @@ moveUp s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
@@ -121,7 +119,6 @@ moveDown s = if not (selected s) then s else
     Nothing -> s
     Just b -> s {
       board = (Board.board res),
-      currBlock = (Board.board res) Board.! (curr s),
       selected = False,
       steps = (steps s) + (Board.step res),
       finished = Board.finished (Board.board res)
