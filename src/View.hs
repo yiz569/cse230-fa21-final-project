@@ -1,15 +1,14 @@
 module View (view) where
 
 import Brick
+import Brick.Widgets.Border (border, borderWithLabel, hBorder, joinableBorder, vBorder)
+import Brick.Widgets.Border.Style (unicode, unicodeBold)
 import Brick.Widgets.Core as C
-import Brick.Widgets.Border (borderWithLabel, border, hBorder, vBorder, joinableBorder)
-import Brick.Widgets.Border.Style (ascii, unicode, unicodeBold)
-import Text.Printf (printf)
-
+import Graphics.Vty hiding (dim)
 import Model
 import Model.Block as Block
 import Model.Board as Board
-import Graphics.Vty hiding (dim)
+import Text.Printf (printf)
 
 view :: PlayState -> [Widget String]
 view s = [view' s]
@@ -18,32 +17,30 @@ view' :: PlayState -> Widget String
 view' s =
   withBorderStyle unicode $
     borderWithLabel (str (header s)) $
-      vBox [ mkRow s row | row <- [0..4] ]
+      vBox [mkRow s row | row <- [0 .. 4]]
 
 header :: PlayState -> String
-header s = printf "Klotski Level: %d  Step: %d" ((level s) + 1) (steps s)
+header s = printf "Klotski Level: %d  Step: %d" (level s + 1) (steps s)
 
 mkRow :: PlayState -> Int -> Widget n
-mkRow s row = hBox [ mkCell s row col | col <- [0..3] ]
+mkRow s row = hBox [mkCell s row col | col <- [0 .. 3]]
 
 mkCell :: PlayState -> Int -> Int -> Widget n
 mkCell s y x
-  | Model.isCurr s (Block.Pos x y) && null (Model.solution s)=
-    case Model.selected s of
-      True -> withCursor (withBorderStyle unicodeBold raw)
-      _ -> withCursor (withBorderStyle unicode raw)
+  | Model.isCurr s (Block.Pos x y) && null (Model.solution s) =
+    if Model.selected s then withCursor (withBorderStyle unicodeBold raw) else withCursor (withBorderStyle unicode raw)
   | otherwise = withBorderStyle unicode raw
   where
     boardToShow = case Model.solution s of
       [] -> Model.board s
-      x:_ -> x
-    raw = case boardToShow Board.! (Block.Pos x y) of
+      x : _ -> x
+    raw = case boardToShow Board.! Block.Pos x y of
       Nothing -> emptyBlock
       Just b -> case b of
-        t@(Block.Target _ _ _ _) -> renderTarget t x y
-        (Single _ _ _ _) -> single
-        h@(HDouble _ _ _ _) -> renderHDouble h x y
-        v@(VDouble _ _ _ _) -> renderVDouble v x y
+        t@Block.Target {} -> renderTarget t x y
+        Single {} -> single
+        h@HDouble {} -> renderHDouble h x y
+        v@VDouble {} -> renderVDouble v x y
 
 withCursor :: Widget n -> Widget n
 withCursor = modifyDefAttr (`withStyle` reverseVideo)
@@ -79,7 +76,7 @@ col :: Widget n
 col = vBox (replicate 5 (str " "))
 
 emptyBlock :: Widget n
-emptyBlock = (block <+> col <+> col) <=> (row <+> (str " ")) <=> (row <+> (str " "))
+emptyBlock = (block <+> col <+> col) <=> (row <+> str " ") <=> (row <+> str " ")
 
 single, vDoubleTop, vDoubleBottom, hDoubleLeft, hDoubleRight :: Widget n
 single = vLimit 7 $ hLimit 14 $ border block
@@ -93,15 +90,17 @@ targetTopLeft = vLimit 7 $ hLimit 14 $ tlBorder block
 targetTopRight = vLimit 7 $ hLimit 14 $ trBorder block
 targetBottomLeft = vLimit 7 $ hLimit 14 $ blBorder block
 targetBottomRight = vLimit 7 $ hLimit 14 $ brBorder block
+
 -----------------------------------------------------------------------------------
 
 customizedBorder :: Edges Bool -> Widget n -> Widget n
-customizedBorder (Edges t b l r) mid = C.vBox[
-    C.hBox [ tl_corner   , top      , tr_corner],
-    C.hBox [left , mid, right ],
-    C.hBox [bl_corner, bottom, br_corner]
+customizedBorder (Edges t b l r) mid =
+  C.vBox
+    [ C.hBox [tl_corner, top, tr_corner],
+      C.hBox [left, mid, right],
+      C.hBox [bl_corner, bottom, br_corner]
     ]
-    where
+  where
     top = if t then hBorder else C.emptyWidget
     bottom = if b then hBorder else C.emptyWidget
     left = if l then vBorder else col
@@ -110,7 +109,6 @@ customizedBorder (Edges t b l r) mid = C.vBox[
     tr_corner = if t && r then joinableBorder (Edges False True True False) else C.emptyWidget
     bl_corner = if b && l then joinableBorder (Edges True False False True) else C.emptyWidget
     br_corner = if b && r then joinableBorder (Edges True False True False) else C.emptyWidget
-
 
 toplessBorder :: Widget n -> Widget n
 toplessBorder = customizedBorder (Edges False True True True)
