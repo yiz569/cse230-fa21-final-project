@@ -181,5 +181,5 @@ encode b = sum $ f <$> b
     f :: Block -> Integer
     f (Single _ _ x y) = 5 ^ (x * 5 + y)
     f (VDouble _ _ x y) = 2 * 5 ^ (x * 5 + y) + 2 * 5 ^ (x * 5 + y + 1)
-    f (HDouble _ _ x y) = 3 * 5 ^ (x * 5 + y) + 2 * 5 ^ (x * 5 + 5 + y)
-    f (Target _ _ x y) = 4 * (5 ^ (x * 5 + y) + 5 ^ (x * 5 + y + 1) + 5 ^ (x * 5 + 5 + y) + 5 ^ (x * 5 + 6 + y))
+    f (HDouble _ _ x y) = 3 * 5 ^ (x * 5 + y) + 2 * 5 ^ ((x + 1) * 5 + y)
+    f (Target _ _ x y) = 4 * (5 ^ (x * 5 + y) + 5 ^ (x * 5 + y + 1) + 5 ^ ((x + 1) * 5 + y) + 5 ^ ((x + 1) * 5 + y + 1))
