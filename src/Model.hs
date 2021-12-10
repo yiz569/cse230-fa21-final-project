@@ -1,3 +1,5 @@
+{-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
 module Model where
 
 -- import Data.Set (Set, notMember, union, fromList)
@@ -252,7 +254,7 @@ level_7 =
 
 hint :: PlayState -> PlayState
 hint s = case solution s of
-  [] -> hint s {solution = bfs (Seq.singleton $ board s) (Map.singleton (Board.encode $ board s) (board s))}
+  [] -> s {solution = bfs (Seq.singleton $ board s) (Map.singleton (Board.encode $ board s) (board s))}
   _ : xs -> s {solution = xs}
 
 backToGame :: PlayState -> PlayState
@@ -266,19 +268,18 @@ wrapAction action s = case solution s of
 bfs :: Seq Board.Board -> Map Integer Board.Board -> [Board.Board]
 bfs Empty _ = []
 bfs (x :<| xs) seen
-  | Board.finished x = reverse $ f x
+  | Board.finished x = reverse $ traceBack x
   | otherwise = bfs newQueue newSeen
   where
-    newBoards =
-      filter ((`notMember` seen) . Board.encode) $
-        Board.board
-          <$> ([blockDown x, blockLeft x, blockUp x, blockRight x] <*> x)
-    newSeen = foldr (\b m -> insert (Board.encode b) x m) seen newBoards
+    (newCodes, newBoards) = unzip $ filter ((`notMember` seen) . fst) $ 
+                            (\b -> (Board.encode b, b)) . Board.board <$>
+                            ([blockDown x, blockLeft x, blockUp x, blockRight x] <*> x)
+    newSeen = foldr (`insert` x) seen newCodes
     newQueue = xs >< Seq.fromList newBoards
-    f :: Board.Board -> [Board.Board]
-    f b =
+    traceBack :: Board.Board -> [Board.Board]
+    traceBack b =
       if parent == b
         then [b]
-        else b : f parent
+        else b : traceBack parent
       where
         parent = seen ! Board.encode b

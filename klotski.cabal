@@ -24,6 +24,7 @@ executable klotski
     build-depends:      base >= 4.9,
                         vty,
                         brick,
+                        mtl,
                         containers
     hs-source-dirs:     src
     other-modules:      View,
