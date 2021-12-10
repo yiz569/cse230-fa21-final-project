@@ -1,7 +1,7 @@
 module View (view) where
 
 import Brick
-import Brick.Widgets.Border (border, borderWithLabel, hBorder, joinableBorder, vBorder)
+import Brick.Widgets.Border (border, borderWithLabel, hBorder, hBorderWithLabel, joinableBorder, vBorder)
 import Brick.Widgets.Border.Style (unicode, unicodeBold)
 import Brick.Widgets.Core as C
 import Graphics.Vty hiding (dim)
@@ -17,7 +17,16 @@ view' :: PlayState -> Widget String
 view' s =
   withBorderStyle unicode $
     borderWithLabel (str (header s)) $
-      vBox [mkRow s row | row <- [0 .. 4]]
+      vBox [mkRow s row | row <- [0 .. 4]] <=> prompt1 <=> prompt2 <=> prompt3
+
+prompt1 :: Widget n
+prompt1 = hLimit 56 $ joinBorders $ hBorderWithLabel (str "h: hint; b: back to game; r: restart level")
+
+prompt2 :: Widget n
+prompt2 = hLimit 56 $ joinBorders $ hBorderWithLabel (str "[1-7]: select levels; ↑↓←→: move;")
+
+prompt3 :: Widget n
+prompt3 = hLimit 56 $ joinBorders $ hBorderWithLabel (str "Enter: select/de-select")
 
 header :: PlayState -> String
 header s = printf "Klotski Level: %d  Step: %d" (level s + 1) (steps s)

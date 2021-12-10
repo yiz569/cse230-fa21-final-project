@@ -14,6 +14,7 @@ data MoveResult = MoveResult
   { board :: Board,
     step :: Int
   }
+  deriving (Eq, Show)
 
 blockRight :: Board -> Block -> MoveResult
 blockRight board block = if canRight board block then MoveResult (right board block) 1 else MoveResult board 0

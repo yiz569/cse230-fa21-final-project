@@ -51,7 +51,7 @@ data Block
         posX :: Int,
         posY :: Int
       }
-  deriving (Eq)
+  deriving (Eq, Show)
 
 covers :: Block -> Pos -> Bool
 covers b pos =

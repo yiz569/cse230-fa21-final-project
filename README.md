@@ -12,10 +12,10 @@ Group Members: (github username)
 ### Introduction
 
 In this project, we will implement an ancient sliding block puzzle game: Klotski.
-In our game, we will provide a total of 15 levels where each has a different
-starting layout. Players can choose a level to play with. We will also record
-the number of steps they take in each level. The fewer steps they take, the
-higher score they will get for the game.
+In our game, we will provide a total of 7 levels (1 tutorial) where each has a 
+different starting layout. Players can choose a level to play with. We will also 
+record the number of steps they take in each level. The fewer steps they take, 
+the better they are playing this game.
 
 ### How to play the game
 
@@ -25,8 +25,8 @@ A Klotski game contains ten blocks of different sizes to slide around on a
 always empty. The blocks cannot rotate or exit the board. The game ends when the
 largest block reaches the bottom center before it can exit.
 
-We will label the blocks from 0 to 9. Users can choose a block by clicking a
-number and move that block either up, down, left or right into an adjacent empty
+Users can choose a block by moving the cursor onto that block and clicking enter
+and then move that block either up, down, left or right into an adjacent empty
 space using the up, down, left, and right arrow keys. Each time they move, the
 step counter will increase by 1.
 
@@ -61,7 +61,7 @@ exit the playing area.
 - Do you expect to meet your goals until the deadline?\
   We believe we can complete the development of the major functions and deliver a
   playale Klotski board game before the deadline. The key functions include showing
-  the board, accepting user inputs, updating the board and score, and also checking
+  the board, accepting user inputs, updating the board and steps, and also checking
   whether players pass the game. However, as we mentioned in the previous section,
   we might not able to successfully deliver a automated Klotski solver but we will
   definitely try on that.
